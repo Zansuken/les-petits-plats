@@ -1,5 +1,7 @@
-import { build, updateView } from "./componentBuilder";
-import Button from "./components/shared/Button";
+import { build } from "./componentBuilder";
+import Header from "./components/Header";
+import Home from "./pages/Home";
+import routes from "./router/routes";
 import { store } from "./store";
 // eslint-disable-next-line no-unused-vars
 import { Component } from "./types";
@@ -9,26 +11,28 @@ import { Component } from "./types";
  * @returns {Component} The virtual DOM node representing the App component.
  */
 const App = () => {
-  const count = store.getCount();
+  store.setRoute(routes.HOME);
 
-  const updateCount = () => {
-    const oldCount = store.getCount();
-    updateView(() => store.onUpdateCount(oldCount + 1));
+  const currentRoute = store.getRoute();
+
+  const getPage = () => {
+    switch (currentRoute) {
+      case routes.HOME:
+        return Home();
+
+      default:
+        break;
+    }
   };
 
   return build(
     "div",
-    { id: "app" },
-    build(
-      "div",
-      { class: "flex flex-col items-center gap-4" },
-      build(
-        "span",
-        { id: "count", class: "text-6xl font-title" },
-        "Count: " + count
-      ),
-      Button({ label: "Increment", onclick: updateCount })
-    )
+    {
+      id: "app",
+      class: "flex flex-col items-center justify-start w-screen h-screen",
+    },
+    Header(),
+    getPage()
   );
 };
 

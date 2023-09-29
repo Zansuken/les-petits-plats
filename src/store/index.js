@@ -1,7 +1,10 @@
+import routes from "../router/routes";
+
 export let store = {
-  count: 0,
-  getCount: () => store.count,
-  onUpdateCount: (newCount) => {
-    store = { ...store, count: newCount };
+  route: routes.HOME,
+  getRoute: () => store.route,
+  setRoute: (newRoute) => {
+    window.history.pushState(null, null, newRoute);
+    store.route = newRoute;
   },
 };

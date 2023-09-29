@@ -3,14 +3,10 @@ body {
   min-height: 100vh;
 }
 
-#app {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 button {
   appearance: none;
+}
+
+input:focus {
+  outline: none;
 }
