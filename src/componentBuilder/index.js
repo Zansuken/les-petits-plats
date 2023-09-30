@@ -73,10 +73,37 @@ const updateElement = (parent, newNode, oldNode, index = 0) => {
   if (!oldNode) {
     parent.appendChild(createElement(newNode));
   } else if (!newNode) {
-    parent.removeChild(parent.childNodes[index]);
+    if (typeof oldNode === "string") {
+      parent.textContent = "";
+    } else {
+      parent.removeChild(parent.childNodes[index]);
+    }
   } else if (isNodeDiff(newNode, oldNode)) {
-    parent.replaceChild(createElement(newNode), parent.childNodes[index]);
+    if (typeof oldNode === "string") {
+      parent.textContent = newNode;
+    } else {
+      parent.replaceChild(createElement(newNode), parent.childNodes[index]);
+    }
   } else if (newNode.type) {
+    const oldClasses = oldNode?.props?.class;
+    const newClasses = newNode?.props?.class;
+    if (oldClasses !== newClasses) {
+      const concernedNode = parent.childNodes[index];
+      const newClassesArray = newClasses.split(" ");
+      const oldClassesArray = Array.from(concernedNode.classList);
+
+      for (const newClassesElement of newClassesArray) {
+        if (!oldClassesArray.includes(newClassesElement)) {
+          concernedNode.classList.add(newClassesElement);
+        }
+      }
+
+      for (const oldClassesElement of oldClassesArray) {
+        if (!newClassesArray.includes(oldClassesElement)) {
+          concernedNode.classList.remove(oldClassesElement);
+        }
+      }
+    }
     const newLength = newNode.children.length;
     const oldLength = oldNode.children.length;
     for (let i = 0; i < newLength || i < oldLength; i++) {
