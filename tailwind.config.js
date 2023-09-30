@@ -12,7 +12,8 @@ module.exports = {
         yellow: "#FFD15B",
         "gray-dark": "#273444",
         grey: "#7A7A7A",
-        "gray-light": "#d3dce6",
+        "bg-grey": "#EDEDED",
+        "gray-light": "#C6C6C6",
         white: "#ffffff",
       },
       fontFamily: {
@@ -20,6 +21,7 @@ module.exports = {
         title: ["Anton"],
       },
       fontSize: {
+        counter: "21px",
         "4.5xl": "2.75rem",
       },
       maxHeight: {
@@ -27,6 +29,9 @@ module.exports = {
       },
       backgroundImage: {
         banner: "url('/assets/images/banner.png')",
+      },
+      transitionProperty: {
+        height: "height",
       },
     },
   },
