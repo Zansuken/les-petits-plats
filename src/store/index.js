@@ -7,4 +7,9 @@ export let store = {
     window.history.pushState(null, null, newRoute);
     store.route = newRoute;
   },
+  searchInput: "",
+  setSearchInput: (value) => {
+    store.searchInput = value;
+  },
+  getSearchInput: () => store.searchInput,
 };
