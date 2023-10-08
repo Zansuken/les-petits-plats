@@ -7,10 +7,18 @@ const styles = {
 
 const Home = () => {
   return build(
-    "main",
-    { class: styles.root },
+    {
+      element: "main",
+      className: styles.root,
+    },
     Filters(),
-    build("div", { class: "h-[500px]" }, "Recipes")
+    build(
+      {
+        element: "div",
+        className: "h-[500px]",
+      },
+      "Recipes"
+    )
   );
 };
 

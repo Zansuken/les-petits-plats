@@ -1,35 +1,43 @@
 import { build } from "./componentBuilder";
 import Header from "./components/Header";
 import Home from "./pages/Home";
+import { getParams } from "./router/helpers";
 import routes from "./router/routes";
-import { store } from "./store";
+import { dispatch } from "./store";
+import { setCurrentRoute } from "./store/actions";
+import { currentRouteSelector, useSelector } from "./store/selectors";
 // eslint-disable-next-line no-unused-vars
-import { Component } from "./types";
+import { ComponentType } from "./types";
+
+const styles = {
+  root: "flex flex-col items-center justify-start w-screen h-screen font-default overflow-x-hidden scroll-smooth",
+};
 
 /**
  * The App component.
- * @returns {Component} The virtual DOM node representing the App component.
+ * @returns {ComponentType} The virtual DOM node representing the App component.
  */
 const App = () => {
-  store.setRoute(routes.HOME);
+  const currentParams = getParams();
+  const currentRoute = useSelector(currentRouteSelector);
 
-  const currentRoute = store.getRoute();
+  if (!currentRoute.includes(routes.HOME)) {
+    if (currentParams.length > 0) {
+      dispatch(setCurrentRoute({ route: routes.HOME, params: currentParams }));
+    } else {
+      dispatch(setCurrentRoute({ route: routes.HOME }));
+    }
+  }
 
   const getPage = () => {
-    switch (currentRoute) {
-      case routes.HOME:
-        return Home();
-
-      default:
-        break;
-    }
+    if (currentRoute.includes(routes.HOME)) return Home();
   };
 
   return build(
-    "div",
     {
+      element: "div",
       id: "app",
-      class: "flex flex-col items-center justify-start w-screen h-screen",
+      className: styles.root,
     },
     Header(),
     getPage()

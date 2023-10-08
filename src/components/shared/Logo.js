@@ -1,6 +1,20 @@
 import { build } from "../../componentBuilder";
+import classNamesBuilder from "../../helpers/classNames";
 
-const Logo = () =>
-  build("img", { src: "/assets/images/logo.svg", class: "h-6" });
+const styles = {
+  root: "h-6",
+  cursorPointer: "cursor-pointer",
+};
+
+const Logo = ({ isClickable, ...props }) =>
+  build({
+    element: "img",
+    src: "/assets/images/logo.svg",
+    className: classNamesBuilder([
+      { className: styles.root },
+      { isUsed: isClickable, className: styles.cursorPointer },
+    ]),
+    ...props,
+  });
 
 export default Logo;

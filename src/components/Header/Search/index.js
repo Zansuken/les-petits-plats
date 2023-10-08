@@ -1,5 +1,9 @@
 import { build, updateView } from "../../../componentBuilder";
-import { store } from "../../../store";
+import { debounce } from "../../../helpers/common";
+import { getParams } from "../../../router/helpers";
+import { dispatch, store } from "../../../store";
+import { setSearchInput } from "../../../store/actions";
+import { searchSelector, useSelector } from "../../../store/selectors";
 import Button from "../../shared/Button";
 import Icon from "../../shared/Icon";
 import TextField from "../../shared/TextField";
@@ -10,23 +14,35 @@ const styles = {
 };
 
 const Search = () => {
-  const searchInput = () => store.getSearchInput();
-  const onSearch = () => searchInput() && updateView(() => searchInput());
+  const currentParamsSearch = getParams().find(({ name }) => name === "search");
+
+  const onInput = debounce((event) => {
+    dispatch(setSearchInput(event.target.value ?? ""));
+  }, 300);
+
+  const searchInput = () => useSelector(searchSelector);
+
+  const onSearch = () => {
+    if (searchInput()) {
+      updateView(() => searchInput());
+      store.addParams({ name: "search", value: searchInput() });
+    }
+  };
 
   const { root, title } = styles;
 
   return build(
-    "div",
-    { class: root },
+    { element: "div", className: root },
     build(
-      "h1",
       {
-        class: title,
+        element: "h1",
+        className: title,
       },
       "CHERCHEZ PARMI PLUS DE 1500 RECETTES DU QUOTIDIEN,SIMPLES ET DÉLICIEUSES"
     ),
     TextField({
       fullWidth: true,
+      canReset: true,
       adornment: Button({
         label: Icon({
           src: "/assets/images/searchIcon.svg",
@@ -34,9 +50,8 @@ const Search = () => {
         onclick: onSearch,
       }),
       placeHolder: "Rechercher une recette, un ingrédient, ...",
-      onInput: (event) => {
-        store.setSearchInput(event.target.value ? event.target.value : "");
-      },
+      defaultValue: currentParamsSearch?.value ?? "",
+      onInput,
       onKeyEnter: onSearch,
     })
   );

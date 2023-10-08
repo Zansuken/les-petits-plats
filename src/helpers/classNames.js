@@ -1,6 +1,6 @@
 /**
  * @typedef {Object} ClassName
- * @property {string} value
+ * @property {string} className
  * @property {boolean} isUsed
  */
 
@@ -11,8 +11,8 @@
  */
 const classNamesBuilder = (classNames = []) => {
   const currentClassNames = Array.from(new Set(classNames))
-    .filter(({ isUsed }) => isUsed)
-    .map(({ value }) => value);
+    .filter(({ isUsed }) => (isUsed === undefined ? true : isUsed))
+    .map(({ className }) => className);
 
   return currentClassNames.join(" ");
 };

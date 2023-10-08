@@ -10,34 +10,57 @@ const styles = {
   searchBoxContainer:
     "border-solid border-gray-light border rounded-sm flex justify-between pr-2",
   searchBox: "p-2 w-full max-w-[138px] text-grey",
+  optionsContainer: "max-h-36 overflow-y-scroll",
 };
 
-const OptionsList = ({ isOpen, optionsList }) => {
-  const { icon, list, listClosed, searchBox, searchBoxContainer } = styles;
+const OptionsList = ({ isOpen, optionsList, onSearch, id, search }) => {
+  const {
+    icon,
+    list,
+    listClosed,
+    searchBox,
+    searchBoxContainer,
+    optionsContainer,
+  } = styles;
 
   const rootClasses = classNamesBuilder([
-    { value: list, isUsed: true },
-    { value: listClosed, isUsed: !isOpen() },
+    { className: list },
+    { className: listClosed, isUsed: !isOpen },
   ]);
 
   return build(
-    "div",
     {
-      class: rootClasses,
+      element: "div",
+      className: rootClasses,
     },
     build(
-      "div",
-      { class: "p-4 pt-0 pb-2" },
+      {
+        element: "div",
+        className: "p-4 pt-0 pb-2",
+      },
       TextField({
-        containerProps: { class: searchBoxContainer },
-        textInputProps: { class: searchBox },
+        containerProps: { className: searchBoxContainer },
+        textInputProps: {
+          className: searchBox,
+          id: "searchBox",
+          autofocus: true,
+        },
+        defaultValue: search,
         adornment: Icon({
           src: "/assets/images/searchIcon.svg",
-          class: icon,
+          className: icon,
         }),
+        onInput: (event) => onSearch(event.target?.value, id),
       })
     ),
-    build("div", {}, build("ul", {}, ...optionsList))
+    build(
+      {
+        element: "div",
+        className: optionsContainer,
+        id: "listItemContainer",
+      },
+      build({ element: "ul", id: "optionsList" }, ...optionsList)
+    )
   );
 };
 

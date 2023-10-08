@@ -1,6 +1,7 @@
 import { build } from "../../../componentBuilder";
 import classNamesBuilder from "../../../helpers/classNames";
 import Icon from "../Icon";
+import Typography from "../Typography";
 
 const styles = {
   root: "flex p-4 gap-16 justify-between cursor-pointer",
@@ -12,17 +13,16 @@ const Label = ({ onMenuOpen, label, isOpen }) => {
   const { root, icon, iconOpen } = styles;
 
   const iconClasses = classNamesBuilder([
-    { isUsed: true, value: icon },
-    { isUsed: isOpen(), value: iconOpen },
+    { className: icon },
+    { isUsed: isOpen, className: iconOpen },
   ]);
 
   return build(
-    "div",
-    { class: root, onclick: onMenuOpen },
-    build("span", { class: label }, label),
+    { element: "div", className: root, onclick: onMenuOpen },
+    Typography({ variant: "span", value: label }),
     Icon({
       src: "/assets/images/arrowDown.svg",
-      class: iconClasses,
+      className: iconClasses,
     })
   );
 };

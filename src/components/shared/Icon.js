@@ -1,5 +1,5 @@
 import { build } from "../../componentBuilder";
 
-const Icon = ({ src, ...props }) => build("img", { src, ...props });
+const Icon = ({ src, ...props }) => build({ element: "img", src, ...props });
 
 export default Icon;

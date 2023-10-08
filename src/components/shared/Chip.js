@@ -1,10 +1,21 @@
 import { build } from "../../componentBuilder";
+import Typography from "./Typography";
+
+const styles = {
+  root: "text-xs py-1 px-4",
+};
 
 const Chip = ({ label }) => {
   return build(
-    "div",
-    { class: "bg-yellow rounded-xl" },
-    build("span", { class: "text-xs py-1 px-4" }, label)
+    {
+      element: "div",
+      className: "bg-yellow rounded-xl",
+    },
+    Typography({
+      variant: "span",
+      value: label,
+      className: styles.root,
+    })
   );
 };
 

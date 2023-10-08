@@ -1,25 +1,20 @@
 import { build } from "../../componentBuilder";
+import classNamesBuilder from "../../helpers/classNames";
+import Button from "./Button";
+import Icon from "./Icon";
 
-const styles = (fullWidth) => ({
-  root: `bg-white p-2.5 pl-9 flex rounded-xl ${fullWidth ? "w-full" : ""}`,
+const styles = {
+  root: "bg-white p-2.5 pl-9 flex rounded-xl",
+  fullWidthStyle: "w-full",
   input: "w-full text-grey",
-});
-
-const defaultProps = {
-  fullWidth: true,
-  placeHolder: "",
-  adornment: null,
-  adornmentPosition: "end",
-  containerProps: {},
-  textInputProps: {},
-  onChange: () => {},
-  onInput: () => {},
-  onKeyEnter: () => {},
+  crossIcon: "w-4",
 };
 
 const TextField = ({
   fullWidth,
+  defaultValue,
   placeHolder,
+  canReset,
   adornment,
   adornmentPosition,
   containerProps,
@@ -27,17 +22,33 @@ const TextField = ({
   onChange,
   onInput,
   onKeyEnter,
-} = defaultProps) => {
-  const { root, input } = styles(fullWidth);
+}) => {
+  const { root, input, fullWidthStyle, crossIcon } = styles;
 
   const children = [
-    build("input", {
+    build({
+      element: "input",
       type: "text",
-      class: defaultProps.textInputProps?.class ?? input,
+      className: textInputProps?.className ?? input,
       placeholder: placeHolder ?? "",
+      value: defaultValue ?? "",
+      onchange: onChange,
+      oninput: onInput,
       ...textInputProps,
     }),
   ];
+
+  if (canReset) {
+    children.push(
+      Button({
+        label: Icon({
+          src: "/assets/images/crossIcon.svg",
+          className: crossIcon,
+        }),
+        variant: "text",
+      })
+    );
+  }
 
   if (adornment) {
     if (adornmentPosition && adornmentPosition === "start") {
@@ -48,10 +59,14 @@ const TextField = ({
   }
 
   return build(
-    "div",
     {
-      class: defaultProps.containerProps?.class ?? root,
-      onchange: onChange,
+      element: "div",
+      className:
+        containerProps?.className ??
+        classNamesBuilder([
+          { className: root },
+          { isUsed: fullWidth, className: fullWidthStyle },
+        ]),
       oninput: onInput,
       onkeydown: ({ key }) => key === "Enter" && onKeyEnter(),
       ...containerProps,
