@@ -7,7 +7,7 @@ export const generateUniqueId = () => {
 export const debounce = (func, delay) => {
   let timeoutId;
 
-  return function (...args) {
+  return (...args) => {
     clearTimeout(timeoutId);
 
     timeoutId = setTimeout(() => {

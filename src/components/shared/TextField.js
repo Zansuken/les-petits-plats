@@ -22,6 +22,7 @@ const TextField = ({
   onChange,
   onInput,
   onKeyEnter,
+  onReset,
 }) => {
   const { root, input, fullWidthStyle, crossIcon } = styles;
 
@@ -46,6 +47,7 @@ const TextField = ({
           className: crossIcon,
         }),
         variant: "text",
+        onclick: onReset,
       })
     );
   }
@@ -68,7 +70,7 @@ const TextField = ({
           { isUsed: fullWidth, className: fullWidthStyle },
         ]),
       oninput: onInput,
-      onkeydown: ({ key }) => key === "Enter" && onKeyEnter(),
+      onkeydown: ({ key } = { key: "" }) => key === "Enter" && onKeyEnter(),
       ...containerProps,
     },
     ...children

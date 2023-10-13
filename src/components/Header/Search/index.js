@@ -1,6 +1,6 @@
 import { build, updateView } from "../../../componentBuilder";
 import { debounce } from "../../../helpers/common";
-import { addParams, getParams } from "../../../router/helpers";
+import { addParams, getParams, removeParams } from "../../../router/helpers";
 import { dispatch } from "../../../store";
 import { setSearchInput } from "../../../store/actions";
 import { searchSelector, useSelector } from "../../../store/selectors";
@@ -17,16 +17,27 @@ const Search = () => {
   const currentParamsSearch = getParams().find(({ name }) => name === "search");
 
   const onInput = debounce((event) => {
-    dispatch(setSearchInput(event.target.value ?? ""));
+    if (event?.target) {
+      dispatch(setSearchInput(event.target.value ?? ""));
+    }
   }, 300);
 
   const searchInput = () => useSelector(searchSelector);
 
   const onSearch = () => {
     if (searchInput()) {
-      updateView(() => searchInput());
+      updateView();
       addParams({ name: "search", value: searchInput() });
+    } else {
+      removeParams("search");
+      dispatch(setSearchInput(""));
     }
+  };
+
+  const onResetSearch = () => {
+    removeParams("search");
+    dispatch(setSearchInput(""));
+    updateView();
   };
 
   const { root, title } = styles;
@@ -53,6 +64,7 @@ const Search = () => {
       defaultValue: currentParamsSearch?.value ?? "",
       onInput,
       onKeyEnter: onSearch,
+      onReset: onResetSearch,
     })
   );
 };
