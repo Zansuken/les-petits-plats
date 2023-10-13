@@ -1,5 +1,6 @@
 import { root } from "../../main";
 import App from "../App";
+import { debounce, isNodeDiff } from "../helpers/common";
 // eslint-disable-next-line no-unused-vars
 import { ComponentType } from "../types";
 
@@ -59,22 +60,13 @@ export const createElement = (node) => {
 };
 
 /**
- * Updates the real DOM to match the virtual DOM.
+ * Updates the view.
  */
-const update = () => {
+export const updateView = debounce(() => {
   const newApp = App();
   updateElement(root, newApp, oldApp, 0);
   oldApp = newApp;
-};
-
-/**
- * Performs an action and then updates the view.
- * @param {Function} action - The action to perform.
- */
-export const updateView = (action) => {
-  action();
-  update();
-};
+}, 1);
 
 const updateAttributes = (element, newProps, oldProps) => {
   const allProps = { ...newProps, ...oldProps };
@@ -96,9 +88,15 @@ const updateEvents = (element, newProps, oldProps) => {
       const eventName = prop.substring(2).toLowerCase();
       if (newProps[prop] !== oldProps[prop]) {
         if (newProps[prop]) {
-          element.addEventListener(eventName, newProps[prop]);
+          element.addEventListener(eventName, (event) => {
+            event.stopPropagation();
+            newProps[prop]();
+          });
         } else {
-          element.removeEventListener(eventName, oldProps[prop]);
+          element.removeEventListener(eventName, (event) => {
+            event.stopPropagation();
+            oldProps[prop]();
+          });
         }
       }
     }
@@ -238,12 +236,3 @@ const updateElement = (parent, newNode, oldNode, index = 0) => {
     updateChildren(element, newChildren, oldChildren);
   }
 };
-
-/**
- * Checks if two virtual DOM nodes are different.
- * @param {object|string} node1 - The first virtual DOM node.
- * @param {object|string} node2 - The second virtual DOM node.
- * @returns {boolean} True if the nodes are different, false otherwise.
- */
-const isNodeDiff = (newNode, oldNode) =>
-  JSON.stringify(newNode) !== JSON.stringify(oldNode);

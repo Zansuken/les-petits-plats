@@ -1,7 +1,7 @@
 import { build, updateView } from "../../../componentBuilder";
 import { debounce } from "../../../helpers/common";
-import { getParams } from "../../../router/helpers";
-import { dispatch, store } from "../../../store";
+import { addParams, getParams } from "../../../router/helpers";
+import { dispatch } from "../../../store";
 import { setSearchInput } from "../../../store/actions";
 import { searchSelector, useSelector } from "../../../store/selectors";
 import Button from "../../shared/Button";
@@ -25,7 +25,7 @@ const Search = () => {
   const onSearch = () => {
     if (searchInput()) {
       updateView(() => searchInput());
-      store.addParams({ name: "search", value: searchInput() });
+      addParams({ name: "search", value: searchInput() });
     }
   };
 

@@ -18,3 +18,12 @@ export const debounce = (func, delay) => {
 
 export const removeAccents = (string) =>
   string.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+/**
+ * Checks if two virtual DOM nodes are different.
+ * @param {object|string} node1 - The first virtual DOM node.
+ * @param {object|string} node2 - The second virtual DOM node.
+ * @returns {boolean} True if the nodes are different, false otherwise.
+ */
+export const isNodeDiff = (newNode, oldNode) =>
+  JSON.stringify(newNode) !== JSON.stringify(oldNode);

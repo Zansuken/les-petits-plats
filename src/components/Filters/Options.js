@@ -1,5 +1,5 @@
 import { build, updateView } from "../../componentBuilder";
-import { removeAccents } from "../../helpers/common";
+import { isNodeDiff, removeAccents } from "../../helpers/common";
 import { addParams, removeParams } from "../../router/helpers";
 import { dispatch } from "../../store";
 import {
@@ -86,32 +86,24 @@ const mockedOptions = [
     },
   ],
 ];
-let isIngredientsOpen = false;
-let isApplianceOpen = false;
-let isUtensilsOpen = false;
+
+const CATEGORIES = ["ingredients", "appliance", "utensils"];
+
+let isOpen = {
+  ingredients: false,
+  appliance: false,
+  utensils: false,
+};
 
 const Options = () => {
-  const setIsIngredientsOpen = () => (isIngredientsOpen = true);
-  const setIsIngredientsClosed = () => (isIngredientsOpen = false);
-  const setIsApplianceOpen = () => (isApplianceOpen = true);
-  const setIsApplianceClosed = () => (isApplianceOpen = false);
-  const setIsUtensilsOpen = () => (isUtensilsOpen = true);
-  const setIsUtensilsClosed = () => (isUtensilsOpen = false);
-
   const selectedTags = () => useSelector(selectedTagsSelector);
 
   const onSelect = (option) => {
     const { category, id: newTagId } = option;
-
     const concernedCategory = selectedTags()[category];
-
-    let newTags = [...concernedCategory];
-
-    if (concernedCategory.some(({ id }) => id === newTagId)) {
-      newTags = newTags.filter(({ id }) => id !== newTagId);
-    } else {
-      newTags = [...newTags, option];
-    }
+    const newTags = concernedCategory
+      .filter(({ id }) => id !== newTagId)
+      .concat(option);
 
     if (newTags.length > 0) {
       addParams({
@@ -126,41 +118,12 @@ const Options = () => {
     updateView(() => {});
   };
 
-  /**
-   * @typedef {Object} FormattedOptions
-   * @property {string} id
-   * @property {string} category
-   * @property {string} name
-   */
-
-  /**
-   *
-   * @param {string} category
-   * @returns {FormattedOptions[]} formatted options
-   */
   const formattedOptions = (options, category) =>
     options.map((option) => ({
       id: removeAccents(option.name.toLowerCase().split(" ").join("_")),
       category,
       ...option,
     }));
-
-  const formattedIngredients = formattedOptions(
-    mockedOptions[0],
-    "ingredients"
-  );
-  const formattedAppliance = formattedOptions(mockedOptions[1], "appliance");
-  const formattedUtensils = formattedOptions(mockedOptions[2], "utensils");
-
-  const { ingredients, appliance, utensils } = selectedTags();
-
-  dispatch(
-    setDefaultOptions({
-      ingredients: formattedIngredients,
-      appliance: formattedAppliance,
-      utensils: formattedUtensils,
-    })
-  );
 
   const onSearch = (input, id) => {
     const filteredOption = useSelector(filteredOptionsSelector(id));
@@ -184,41 +147,32 @@ const Options = () => {
     updateView(() => {});
   };
 
+  const multipleSelectInputs = CATEGORIES.map((category, index) => {
+    const formatted = formattedOptions(mockedOptions[index], category);
+    const selected = selectedTags()[category];
+    const defaultOptions =
+      useSelector(filteredOptionsSelector(category))?.defaultResult ?? [];
+
+    if (isNodeDiff(defaultOptions, formatted)) {
+      dispatch(setDefaultOptions({ [category]: formatted }));
+    }
+
+    return MultipleSelect({
+      id: category,
+      label: category.charAt(0).toUpperCase() + category.slice(1),
+      options: formatted,
+      selectedOptions: selected,
+      isOpen: isOpen[category],
+      onOpen: () => (isOpen[category] = true),
+      onClose: () => (isOpen[category] = false),
+      onSelect,
+      onSearch,
+    });
+  });
+
   return build(
     { element: "div", className: styles.root },
-    MultipleSelect({
-      id: "ingredients",
-      label: "Ingrédients",
-      options: formattedIngredients,
-      selectedOptions: ingredients,
-      isOpen: isIngredientsOpen,
-      onOpen: setIsIngredientsOpen,
-      onClose: setIsIngredientsClosed,
-      onSelect,
-      onSearch,
-    }),
-    MultipleSelect({
-      id: "appliance",
-      label: "Appareils",
-      options: formattedAppliance,
-      selectedOptions: appliance,
-      isOpen: isApplianceOpen,
-      onOpen: setIsApplianceOpen,
-      onClose: setIsApplianceClosed,
-      onSelect,
-      onSearch,
-    }),
-    MultipleSelect({
-      id: "utensils",
-      label: "Ustensiles",
-      options: formattedUtensils,
-      selectedOptions: utensils,
-      isOpen: isUtensilsOpen,
-      onOpen: setIsUtensilsOpen,
-      onClose: setIsUtensilsClosed,
-      onSelect,
-      onSearch,
-    })
+    ...multipleSelectInputs
   );
 };
 
