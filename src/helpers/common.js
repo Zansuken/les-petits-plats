@@ -19,6 +19,9 @@ export const debounce = (func, delay) => {
 export const removeAccents = (string) =>
   string.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
+export const capitalize = (string) =>
+  string.charAt(0).toUpperCase() + string.slice(1);
+
 /**
  * Checks if two virtual DOM nodes are different.
  * @param {object|string} node1 - The first virtual DOM node.

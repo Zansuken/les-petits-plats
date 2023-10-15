@@ -1,5 +1,5 @@
 import { build, updateView } from "../../../componentBuilder";
-import { isNodeDiff, removeAccents } from "../../../helpers/common";
+import { capitalize, isNodeDiff, removeAccents } from "../../../helpers/common";
 import { dispatch } from "../../../store";
 import {
   addSelectedTag,
@@ -13,79 +13,33 @@ import {
   useSelector,
 } from "../../../store/selectors";
 import MultipleSelect from "../../shared/MultipleSelect";
+import recipesData from "../../../../database/recipes.js";
 
 const styles = {
   root: "flex gap-4 max-w-2xl w-[100%] justify-between flex-wrap",
 };
 
-/**
- * @type {string[]}
- */
-const mockedOptions = [
-  [
-    {
-      name: "Pâte feuilletée",
-    },
-    {
-      name: "Oeuf",
-    },
-    {
-      name: "Lait de coco",
-    },
-    {
-      name: "Jus de citron",
-    },
-    {
-      name: "Crème de coco",
-    },
-    {
-      name: "Sucre",
-    },
-    {
-      name: "Glaçons",
-    },
-  ],
-  [
-    {
-      name: "Blender",
-    },
-    {
-      name: "Saladier",
-    },
-    {
-      name: "Cocotte",
-    },
-    {
-      name: "Cuiseur de riz",
-    },
-    {
-      name: "Four",
-    },
-    {
-      name: "Casserole",
-    },
-  ],
-  [
-    {
-      name: "couteau",
-    },
-    {
-      name: "saladier",
-    },
-    {
-      name: "cuillère en bois",
-    },
-    {
-      name: "poêle à frire",
-    },
-    {
-      name: "plat à gratin",
-    },
-    {
-      name: "râpe à fromage",
-    },
-  ],
-];
+const options = () => {
+  const ingredients = new Set([]);
+  const appliances = new Set([]);
+  const utensils = new Set([]);
+
+  recipesData.forEach((recipeData) => {
+    appliances.add(recipeData.appliance.toLowerCase());
+    recipeData.ustensils.forEach((utensil) =>
+      utensils.add(utensil.toLowerCase())
+    );
+    recipeData.ingredients.forEach(({ ingredient }) =>
+      ingredients.add(ingredient.toLowerCase())
+    );
+  });
+
+  return [
+    Array.from(ingredients).map((item) => ({ name: item })),
+    Array.from(appliances).map((item) => ({ name: item })),
+    Array.from(utensils).map((item) => ({ name: item })),
+  ];
+};
 
 const CATEGORIES = ["ingredients", "appliance", "utensils"];
 
@@ -140,7 +94,7 @@ const Options = () => {
   };
 
   const multipleSelectInputs = CATEGORIES.map((category, index) => {
-    const formatted = formattedOptions(mockedOptions[index], category);
+    const formatted = formattedOptions(options()[index], category);
     const selected = selectedTags()[category];
     const defaultOptions =
       useSelector(filteredOptionsSelector(category))?.defaultResult ?? [];
@@ -151,7 +105,7 @@ const Options = () => {
 
     return MultipleSelect({
       id: category,
-      label: category.charAt(0).toUpperCase() + category.slice(1),
+      label: capitalize(category),
       options: formatted,
       selectedOptions: selected,
       isOpen: isOpen[category],

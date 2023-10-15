@@ -1,6 +1,6 @@
 import { build, updateView } from "../../../componentBuilder";
 import { classNamesBuilder } from "../../../helpers/classNames";
-import { removeAccents } from "../../../helpers/common";
+import { capitalize, removeAccents } from "../../../helpers/common";
 import { filteredOptionsSelector, useSelector } from "../../../store/selectors";
 import Icon from "../Icon";
 import Typography from "../Typography";
@@ -40,7 +40,11 @@ const Options = ({ selectedOptions, id, onSelect }) => {
         ]),
         onclick: () => onSelect(option),
       },
-      Typography({ variant: "span", value: option?.name, className: label }),
+      Typography({
+        variant: "span",
+        value: capitalize(option?.name),
+        className: label,
+      }),
       Icon({
         src: "assets/images/crossPlainIcon.svg",
         className: icon,

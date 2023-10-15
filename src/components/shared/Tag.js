@@ -1,4 +1,5 @@
 import { build } from "../../componentBuilder";
+import { capitalize } from "../../helpers/common";
 import Icon from "./Icon";
 import Typography from "./Typography";
 
@@ -18,7 +19,11 @@ const Tag = ({ id, onClick, tag, label = "" }) => {
       tabindex: 0,
       onClick: () => onClick(tag),
     },
-    Typography({ variant: "span", value: label, className: styles.label }),
+    Typography({
+      variant: "span",
+      value: capitalize(label),
+      className: styles.label,
+    }),
     Icon({ src: "/assets/images/crossIconBlack.svg", className: styles.icon })
   );
 };

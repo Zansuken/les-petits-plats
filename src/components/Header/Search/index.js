@@ -27,9 +27,11 @@ const Search = () => {
   const onSearch = () => {
     if (searchInput()) {
       addParams({ name: "search", value: searchInput() });
-      updateView();
 
       // TODO: Create the logic to filter the recipes here:
+      // dispatch(setDisplayedRecipes([1, 2, 3]));
+
+      updateView();
     } else {
       removeParams("search");
       dispatch(setSearchInput(""));

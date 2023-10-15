@@ -3,7 +3,7 @@ import CardBody from "./CardBody";
 import CardHeader from "./CardHeader";
 
 const styles = {
-  root: "bg-white w-96 h-[734px] rounded-3xl overflow-hidden",
+  root: "bg-white w-96 h-[734px] rounded-3xl overflow-hidden drop-shadow-2xl animate-fadeIn",
 };
 
 const RecipeCard = ({ recipe }) => {

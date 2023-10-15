@@ -138,7 +138,7 @@ const updateChildren = (element, newChildren, oldChildren) => {
 
   const removeChild = (key) => {
     const childToRemove = document.getElementById(key);
-    childToRemove.remove();
+    childToRemove?.remove();
   };
 
   const updateChild = (newChild, oldChild, index) => {
