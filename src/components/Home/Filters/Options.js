@@ -155,7 +155,12 @@ const Options = () => {
       options: formatted,
       selectedOptions: selected,
       isOpen: isOpen[category],
-      onOpen: () => (isOpen[category] = true),
+      onOpen: () => {
+        for (let key in isOpen) {
+          isOpen[key] = false;
+        }
+        isOpen[category] = true;
+      },
       onClose: () => (isOpen[category] = false),
       onSelect,
       onSearch,

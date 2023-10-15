@@ -96,7 +96,15 @@ const MultipleSelect = ({
       id: "multipleSelect",
     },
     Label({ isOpen, label, onMenuOpen }),
-    OptionsList({ isOpen, optionsList, onSearch, search, options, id })
+    OptionsList({
+      isOpen,
+      optionsList,
+      onSearch,
+      search,
+      options,
+      id,
+      onMenuOpen,
+    })
   );
 };
 

@@ -13,7 +13,14 @@ const styles = {
   optionsContainer: "max-h-36 overflow-y-scroll",
 };
 
-const OptionsList = ({ isOpen, optionsList, onSearch, id, search }) => {
+const OptionsList = ({
+  isOpen,
+  optionsList,
+  onSearch,
+  id,
+  search,
+  onMenuOpen,
+}) => {
   const {
     icon,
     list,
@@ -28,10 +35,21 @@ const OptionsList = ({ isOpen, optionsList, onSearch, id, search }) => {
     { className: listClosed, isUsed: !isOpen },
   ]);
 
+  document.addEventListener("click", (event) => {
+    const isClickedInside = document
+      .getElementById(`options-root-${id}`)
+      .contains(event.target);
+
+    if (!isClickedInside && isOpen) {
+      onMenuOpen();
+    }
+  });
+
   return build(
     {
       element: "div",
       className: rootClasses,
+      id: `options-root-${id}`,
     },
     build(
       {
