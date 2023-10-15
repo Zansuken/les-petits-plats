@@ -1,6 +1,7 @@
 import {
   ADD_SELECTED_TAG,
   REMOVE_SELECTED_TAG,
+  RESET_DISPLAYED_RECIPES,
   RESET_SELECTED_TAGS,
   SET_CURRENT_ROUTE,
   SET_DEFAULT_OPTIONS,
@@ -106,4 +107,8 @@ export const setRecipes = (payload) => ({
 export const setDisplayedRecipes = (payload) => ({
   type: SET_DISPLAYED_RECIPES,
   payload,
+});
+
+export const resetDisplayedRecipes = () => ({
+  type: RESET_DISPLAYED_RECIPES,
 });
