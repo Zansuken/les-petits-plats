@@ -1,5 +1,5 @@
 import { build, updateView } from "../../../componentBuilder";
-import classNamesBuilder from "../../../helpers/classNames";
+import { classNamesBuilder } from "../../../helpers/classNames";
 import { removeAccents } from "../../../helpers/common";
 import { filteredOptionsSelector, useSelector } from "../../../store/selectors";
 import Icon from "../Icon";
@@ -29,7 +29,7 @@ const Options = ({ selectedOptions, id, onSelect }) => {
 
     return build(
       {
-        key: option.id,
+        key: `option-${option.id}`,
         element: "li",
         className: classNamesBuilder([
           { className: listItem },

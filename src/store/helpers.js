@@ -19,3 +19,11 @@ export const updateFilteredOptions = ({
     return { ...updatedOptions, [key]: updatedOption };
   }, {});
 };
+
+export const addTagToStore = (currentTags, newTag) =>
+  currentTags.some((tag) => tag.id === newTag.id)
+    ? currentTags
+    : [...currentTags, newTag];
+
+export const removeTagFromStore = (currentTags, tagToRemove) =>
+  currentTags.filter((tag) => tag.id !== tagToRemove.id);

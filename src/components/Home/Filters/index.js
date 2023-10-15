@@ -1,7 +1,11 @@
-import { build } from "../../componentBuilder";
-import { getParams } from "../../router/helpers";
-import { dispatch } from "../../store";
-import { setSelectedTags } from "../../store/actions";
+import { build } from "../../../componentBuilder";
+import { getParams } from "../../../router/helpers";
+import { dispatch } from "../../../store";
+import { setSelectedTags } from "../../../store/actions";
+import {
+  displayedRecipesSelector,
+  useSelector,
+} from "../../../store/selectors";
 import Options from "./Options";
 import RecipesCount from "./RecipesCount";
 
@@ -25,10 +29,12 @@ processParam("appliance");
 processParam("utensils");
 
 const Filters = () => {
+  const displayedRecipes = useSelector(displayedRecipesSelector);
+
   return build(
     { element: "div", className: styles.root },
     Options(),
-    RecipesCount()
+    RecipesCount({ count: displayedRecipes.length })
   );
 };
 

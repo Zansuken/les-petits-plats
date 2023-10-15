@@ -1,10 +1,10 @@
 import { build } from "../../componentBuilder";
-import classNamesBuilder from "../../helpers/classNames";
+import { classNamesBuilder } from "../../helpers/classNames";
 import Button from "./Button";
 import Icon from "./Icon";
 
 const styles = {
-  root: "bg-white p-2.5 pl-9 flex rounded-xl",
+  root: "bg-white p-2.5 pl-9 flex rounded-xl min-w-[240px]",
   fullWidthStyle: "w-full",
   input: "w-full text-grey",
   crossIcon: "w-4",
@@ -63,12 +63,10 @@ const TextField = ({
   return build(
     {
       element: "div",
-      className:
-        containerProps?.className ??
-        classNamesBuilder([
-          { className: root },
-          { isUsed: fullWidth, className: fullWidthStyle },
-        ]),
+      className: classNamesBuilder([
+        { className: root },
+        { isUsed: fullWidth, className: fullWidthStyle },
+      ]),
       oninput: onInput,
       onkeydown: ({ key } = { key: "" }) => key === "Enter" && onKeyEnter(),
       ...containerProps,

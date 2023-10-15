@@ -6,8 +6,10 @@ import { ComponentType } from "../types";
 
 /**
  * Creates a virtual DOM node.
- * @param {('a'|'abbr'|'address'|'area'|'article'|'aside'|'audio'|'b'|'base'|'bdi'|'bdo'|'blockquote'|'body'|'br'|'button'|'canvas'|'caption'|'cite'|'code'|'col'|'colgroup'|'data'|'datalist'|'dd'|'del'|'details'|'dfn'|'dialog'|'div'|'dl'|'dt'|'em'|'embed'|'fieldset'|'figcaption'|'figure'|'footer'|'form'|'h1'|'h2'|'h3'|'h4'|'h5'|'h6'|'head'|'header'|'hgroup'|'hr'|'html'|'i'|'iframe'|'img'|'input'|'ins'|'kbd'|'keygen'|'label'|'legend'|'li'|'link'|'main'|'map'|'mark'|'menu'|'menuitem'|'meta'|'meter'|'nav'|'noscript'|'object'|'ol'|'optgroup'|'option'|'output'|'p'|'param'|'picture'|'pre'|'progress'|'q'|'rp'|'rt'|'ruby'|'s'|'samp'|'script'|'section'|'select'|'small'|'source'|'span'|'strong'|'style'|'sub'|'summary'|'sup'|'table'|'tbody'|'td'|'textarea'|'tfoot'|'th'|'thead'|'time'|'title'|'tr'|'track'|'u'|'ul'|'var'|'video'|'wbr')} element - The type of the DOM node.
  * @param {object} props - The properties of the DOM node.
+ * @param {('a'|'abbr'|'address'|'area'|'article'|'aside'|'audio'|'b'|'base'|'bdi'|'bdo'|'blockquote'|'body'|'br'|'button'|'canvas'|'caption'|'cite'|'code'|'col'|'colgroup'|'data'|'datalist'|'dd'|'del'|'details'|'dfn'|'dialog'|'div'|'dl'|'dt'|'em'|'embed'|'fieldset'|'figcaption'|'figure'|'footer'|'form'|'h1'|'h2'|'h3'|'h4'|'h5'|'h6'|'head'|'header'|'hgroup'|'hr'|'html'|'i'|'iframe'|'img'|'input'|'ins'|'kbd'|'keygen'|'label'|'legend'|'li'|'link'|'main'|'map'|'mark'|'menu'|'menuitem'|'meta'|'meter'|'nav'|'noscript'|'object'|'ol'|'optgroup'|'option'|'output'|'p'|'param'|'picture'|'pre'|'progress'|'q'|'rp'|'rt'|'ruby'|'s'|'samp'|'script'|'section'|'select'|'small'|'source'|'span'|'strong'|'style'|'sub'|'summary'|'sup'|'table'|'tbody'|'td'|'textarea'|'tfoot'|'th'|'thead'|'time'|'title'|'tr'|'track'|'u'|'ul'|'var'|'video'|'wbr')} props.element - The type of the DOM node.
+ * @param {string} props.className - The class of the DOM node.
+ * @param {string} props.key - The key of the DOM node.
  * @param {...ComponentType} children - The children of the DOM node.
  * @returns {object} The virtual DOM node.
  */
@@ -143,20 +145,20 @@ const updateChildren = (element, newChildren, oldChildren) => {
     updateElement(element, newChild, oldChild, index);
   };
 
-  const newLength = newChildren.length;
-  const oldLength = oldChildren.length;
+  const newLength = newChildren?.length;
+  const oldLength = oldChildren?.length;
 
   if (oldLength === 0) {
-    newChildren.forEach(appendChild);
+    newChildren?.forEach(appendChild);
   }
 
   if (
-    oldChildren.some(({ key }) => Boolean(key)) &&
-    newChildren.some(({ key }) => Boolean(key))
+    oldChildren?.some(({ key }) => Boolean(key)) &&
+    newChildren?.some(({ key }) => Boolean(key))
   ) {
     if (isNodeDiff(newChildren, oldChildren) && newLength === oldLength) {
-      newChildren.forEach((newChild) => {
-        const oldChild = oldChildren.find(
+      newChildren?.forEach((newChild) => {
+        const oldChild = oldChildren?.find(
           (oldChild) => oldChild.key === newChild.key
         );
         const concernedNode = document.getElementById(oldChild.key);
@@ -166,9 +168,9 @@ const updateChildren = (element, newChildren, oldChildren) => {
 
     if (newLength < oldLength) {
       const childrenToRemove = oldChildren
-        .filter(
+        ?.filter(
           (oldChild) =>
-            !newChildren.some((newChild) => newChild.key === oldChild.key)
+            !newChildren?.some((newChild) => newChild.key === oldChild.key)
         )
         .map(({ key }) => key);
 
@@ -176,9 +178,9 @@ const updateChildren = (element, newChildren, oldChildren) => {
     }
 
     if (newLength > oldLength) {
-      const missingChildren = newChildren.filter(
+      const missingChildren = newChildren?.filter(
         (newChild) =>
-          !oldChildren.some((oldChild) => oldChild.key === newChild.key)
+          !oldChildren?.some((oldChild) => oldChild.key === newChild.key)
       );
 
       missingChildren.forEach(appendChild);

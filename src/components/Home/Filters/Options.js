@@ -1,18 +1,18 @@
-import { build, updateView } from "../../componentBuilder";
-import { isNodeDiff, removeAccents } from "../../helpers/common";
-import { addParams, removeParams } from "../../router/helpers";
-import { dispatch } from "../../store";
+import { build, updateView } from "../../../componentBuilder";
+import { isNodeDiff, removeAccents } from "../../../helpers/common";
+import { dispatch } from "../../../store";
 import {
+  addSelectedTag,
+  removeSelectedTag,
   setDefaultOptions,
   setFilteredOptions,
-  setSelectedTags,
-} from "../../store/actions";
+} from "../../../store/actions";
 import {
   filteredOptionsSelector,
   selectedTagsSelector,
   useSelector,
-} from "../../store/selectors";
-import MultipleSelect from "../shared/MultipleSelect";
+} from "../../../store/selectors";
+import MultipleSelect from "../../shared/MultipleSelect";
 
 const styles = {
   root: "flex gap-4 max-w-2xl w-[100%] justify-between flex-wrap",
@@ -99,23 +99,15 @@ const Options = () => {
   const selectedTags = () => useSelector(selectedTagsSelector);
 
   const onSelect = (option) => {
-    const { category, id: newTagId } = option;
+    const { category } = option;
     const concernedCategory = selectedTags()[category];
-    const newTags = concernedCategory
-      .filter(({ id }) => id !== newTagId)
-      .concat(option);
 
-    if (newTags.length > 0) {
-      addParams({
-        name: category,
-        value: newTags.map(({ id }) => id),
-      });
+    if (concernedCategory.some((tag) => tag.id === option.id)) {
+      dispatch(removeSelectedTag(option));
     } else {
-      removeParams(category);
+      dispatch(addSelectedTag(option));
     }
-
-    dispatch(setSelectedTags({ category, tags: newTags }));
-    updateView(() => {});
+    updateView();
   };
 
   const formattedOptions = (options, category) =>

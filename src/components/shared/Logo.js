@@ -1,5 +1,5 @@
 import { build } from "../../componentBuilder";
-import classNamesBuilder from "../../helpers/classNames";
+import { classNamesBuilder } from "../../helpers/classNames";
 
 const styles = {
   root: "h-6",

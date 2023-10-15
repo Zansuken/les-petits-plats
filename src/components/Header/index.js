@@ -16,8 +16,7 @@ const Header = () => {
   return build(
     {
       element: "header",
-      className:
-        "bg-green w-full py-12 px-14 bg-banner bg-no-repeat bg-cover bg-center",
+      className: "w-full py-12 px-14 bg-banner bg-no-repeat bg-cover bg-center",
     },
     Logo({
       isClickable: true,

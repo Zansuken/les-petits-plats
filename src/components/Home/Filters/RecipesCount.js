@@ -1,13 +1,13 @@
-import Typography from "../shared/Typography";
+import Typography from "../../shared/Typography";
 
 const styles = {
   root: "font-title text-counter leading-8",
 };
 
-const RecipesCount = () =>
+const RecipesCount = ({ count }) =>
   Typography({
     variant: "span",
-    value: "1500 recettes",
+    value: `${count} recettes`,
     props: { className: styles.root },
   });
 

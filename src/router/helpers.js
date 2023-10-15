@@ -78,3 +78,14 @@ export const removeParams = (params) => {
 };
 
 export const resetParams = () => updateRoute(window.location.pathname);
+
+export const updateParamArrayValue = ({ name, array }) => {
+  if (array.length > 0) {
+    addParams({
+      name,
+      value: array.map(({ id }) => id).join(","),
+    });
+  } else {
+    removeParams(name);
+  }
+};

@@ -1,5 +1,5 @@
 import { build } from "../../componentBuilder";
-import classNamesBuilder from "../../helpers/classNames";
+import { classNamesBuilder } from "../../helpers/classNames";
 // eslint-disable-next-line no-unused-vars
 import { ComponentType } from "../../types";
 
