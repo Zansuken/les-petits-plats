@@ -75,6 +75,9 @@ const Search = () => {
         }),
         onclick: onSearch,
       }),
+      textInputProps: {
+        id: "mainSearchInput",
+      },
       placeHolder: "Rechercher une recette, un ingrédient, ...",
       defaultValue: currentParamsSearch?.value ?? "",
       onInput,

@@ -9,6 +9,7 @@ import routes from "../router/routes";
 import {
   ADD_SELECTED_TAG,
   REMOVE_SELECTED_TAG,
+  RESET_DISPLAYED_RECIPES,
   RESET_SELECTED_TAGS,
   SET_CURRENT_ROUTE,
   SET_DEFAULT_OPTIONS,
@@ -175,6 +176,14 @@ export const reducer = ({ type, payload }, state = initialState) => {
       updateStore({
         ...state,
         displayedRecipes: payload,
+      });
+
+      break;
+
+    case RESET_DISPLAYED_RECIPES:
+      updateStore({
+        ...state,
+        displayedRecipes: state.recipes.map(({ id }) => id),
       });
 
       break;
