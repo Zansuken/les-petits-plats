@@ -2,11 +2,20 @@ import { build, updateView } from "../../../componentBuilder";
 import { debounce } from "../../../helpers/common";
 import { addParams, getParams, removeParams } from "../../../router/helpers";
 import { dispatch } from "../../../store";
-import { setSearchInput } from "../../../store/actions";
-import { searchSelector, useSelector } from "../../../store/selectors";
+import {
+  resetDisplayedRecipes,
+  setDisplayedRecipes,
+  setSearchInput,
+} from "../../../store/actions";
+import {
+  recipesSelector,
+  searchSelector,
+  useSelector,
+} from "../../../store/selectors";
 import Button from "../../shared/Button";
 import Icon from "../../shared/Icon";
 import TextField from "../../shared/TextField";
+import { filterRecipe } from "./helpers.js";
 
 const styles = {
   root: "px-60 py-36 flex flex-col gap-8 items-center",
@@ -15,6 +24,7 @@ const styles = {
 
 const Search = () => {
   const currentParamsSearch = getParams().find(({ name }) => name === "search");
+  const recipes = useSelector(recipesSelector);
 
   const onInput = debounce((event) => {
     if (event?.target) {
@@ -25,11 +35,11 @@ const Search = () => {
   const searchInput = () => useSelector(searchSelector);
 
   const onSearch = () => {
+    if (searchInput().length < 3) return;
     if (searchInput()) {
       addParams({ name: "search", value: searchInput() });
 
-      // TODO: Create the logic to filter the recipes here:
-      // dispatch(setDisplayedRecipes([1, 2, 3]));
+      dispatch(setDisplayedRecipes(filterRecipe(recipes, searchInput())));
 
       updateView();
     } else {
@@ -41,6 +51,7 @@ const Search = () => {
   const onResetSearch = () => {
     removeParams("search");
     dispatch(setSearchInput(""));
+    dispatch(resetDisplayedRecipes());
     updateView();
   };
 

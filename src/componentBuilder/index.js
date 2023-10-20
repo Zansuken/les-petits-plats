@@ -11,7 +11,7 @@ import { ComponentType } from "../types";
  * @param {string} props.className - The class of the DOM node.
  * @param {string} props.key - The key of the DOM node.
  * @param {...ComponentType} children - The children of the DOM node.
- * @returns {object} The virtual DOM node.
+ * @returns {ComponentType} The virtual DOM node.
  */
 export const build = ({ element, className, key, ...props }, ...children) => {
   return {
@@ -70,6 +70,12 @@ export const updateView = debounce(() => {
   oldApp = newApp;
 }, 1);
 
+/**
+ * Updates the attributes of a real DOM node.
+ * @param {HTMLElement} element - The DOM node that needs to have its attributes updated.
+ * @param {Object} newProps - The new properties.
+ * @param {Object} oldProps - The old properties.
+ */
 const updateAttributes = (element, newProps, oldProps) => {
   const allProps = { ...newProps, ...oldProps };
 
@@ -81,6 +87,13 @@ const updateAttributes = (element, newProps, oldProps) => {
     }
   }
 };
+
+/**
+ * Updates the event listeners of a real DOM node.
+ * @param {HTMLElement} element - The DOM node that needs to have its event listeners updated.
+ * @param {Object} newProps - The new properties.
+ * @param {Object} oldProps - The old properties.
+ */
 
 const updateEvents = (element, newProps, oldProps) => {
   const allProps = { ...newProps, ...oldProps };
@@ -106,10 +119,10 @@ const updateEvents = (element, newProps, oldProps) => {
 };
 
 /**
- *
- * @param {HTMLElement} element
- * @param {string} newClassName
- * @param {string} oldClassName
+ * Updates the classes of a real DOM node.
+ * @param {HTMLElement} concernedNode - The DOM node that needs to have its classes updated.
+ * @param {string} newClassName - The new classes.
+ * @param {string} oldClassName - The old classes.
  */
 const updateClassNames = (concernedNode, newClasses, oldClasses) => {
   if (!oldClasses || !newClasses) return;
@@ -131,6 +144,12 @@ const updateClassNames = (concernedNode, newClasses, oldClasses) => {
   }
 };
 
+/**
+ * Updates the children node of the real DOM by comparing the old virtual DOM child to the new one.
+ * @param {HTMLElement} element - The parent DOM node of the children that needs to be updated.
+ * @param {ComponentType[]} newChildren - The updated children.
+ * @param {ComponentType[]} oldChildren - The old children.
+ */
 const updateChildren = (element, newChildren, oldChildren) => {
   const appendChild = (child) => {
     element.appendChild(createElement(child));
@@ -200,6 +219,18 @@ const updateChildren = (element, newChildren, oldChildren) => {
 };
 
 /**
+ * Updated the text content of a DOM node.
+ * @param {HTMLElement} element - The DOM node containing the text.
+ * @param {string} newText - The new text to be displayed.
+ * @param {string} oldText - The old text that needs to be replaced.
+ */
+const updateTextContent = (element, newText, oldText) => {
+  if (newText !== oldText) {
+    element.textContent = newText;
+  }
+};
+
+/**
  * Updates a real DOM node to match a virtual DOM node.
  * @param {Node} parent - The parent of the real DOM node.
  * @param {object|string} newNode - The new virtual DOM node.
@@ -232,6 +263,10 @@ const updateElement = (parent, newNode, oldNode, index = 0) => {
     } = newNode;
 
     const element = parent.childNodes[index];
+
+    if (typeof newNode === "string" || typeof oldNode === "string") {
+      updateTextContent(element, newNode, oldNode);
+    }
     updateAttributes(element, newProps, oldProps);
     updateEvents(element, newProps, oldProps);
     updateClassNames(element, newClassName, oldClassName);
