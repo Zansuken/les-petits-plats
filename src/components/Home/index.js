@@ -8,6 +8,8 @@ import {
 } from "../../store/selectors";
 import RecipeCard from "./RecipeCard";
 import recipesData from "../../../database/recipes.js";
+import { getParams } from "../../router/helpers";
+import { filterRecipe } from "../Header/Search/helpers.js";
 
 const styles = {
   root: "w-full pt-14 flex flex-wrap justify-center gap-12",
@@ -16,7 +18,16 @@ const styles = {
 const formatRecipes = (recipes) => recipes.map((recipe) => recipe.id);
 
 dispatch(setRecipes(recipesData));
-dispatch(setDisplayedRecipes(formatRecipes(recipesData)));
+
+const searchParams = getParams().find(({ name }) => name === "search");
+
+dispatch(
+  setDisplayedRecipes(
+    searchParams
+      ? filterRecipe(recipesData, searchParams.value)
+      : formatRecipes(recipesData)
+  )
+);
 
 const HomeContent = () => {
   const { root } = styles;
