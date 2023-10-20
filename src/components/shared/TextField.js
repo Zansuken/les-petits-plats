@@ -10,6 +10,8 @@ const styles = {
   crossIcon: "w-4",
 };
 
+const inputElement = (id) => document.getElementById(id);
+
 const TextField = ({
   fullWidth,
   defaultValue,
@@ -19,6 +21,7 @@ const TextField = ({
   adornmentPosition,
   containerProps,
   textInputProps,
+  textInputProps: { id },
   onChange,
   onInput,
   onKeyEnter,
@@ -40,6 +43,10 @@ const TextField = ({
   ];
 
   if (canReset) {
+    const onClickReset = () => {
+      onReset();
+      inputElement(id).value = "";
+    };
     children.push(
       Button({
         label: Icon({
@@ -47,7 +54,7 @@ const TextField = ({
           className: crossIcon,
         }),
         variant: "text",
-        onclick: onReset,
+        onclick: onClickReset,
       })
     );
   }

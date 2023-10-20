@@ -13,6 +13,8 @@ import { removeAccents } from "../../../helpers/common";
  * @property {string[]} ustensils - The utensils used to make the recipe.
  */
 
+const formatValue = (string) => removeAccents(string.toLowerCase());
+
 /**
  *
  * @param {Recipe[]} recipes
@@ -20,15 +22,14 @@ import { removeAccents } from "../../../helpers/common";
  */
 export const filterRecipe = (recipes, search) => {
   const newRecipes = [];
-
-  const formatValue = (string) => removeAccents(string.toLowerCase());
+  const formattedSearch = formatValue(search);
 
   recipes.forEach(({ name, ingredients, description, id }) => {
     if (
-      formatValue(name).includes(formatValue(search)) ||
-      formatValue(description).includes(formatValue(search)) ||
+      formatValue(name).includes(formattedSearch) ||
+      formatValue(description).includes(formattedSearch) ||
       ingredients.some(({ ingredient }) =>
-        formatValue(ingredient).includes(formatValue(search))
+        formatValue(ingredient).includes(formattedSearch)
       )
     ) {
       newRecipes.push(id);
