@@ -1,3 +1,4 @@
+import { removeAccents } from "../../../helpers/common";
 /**
  * @typedef {Object} Recipe
  * @property {number} id - The recipe's ID.
@@ -11,22 +12,49 @@
  * @property {string[]} ustensils - The utensils used to make the recipe.
  */
 
+const formatValue = (string) => removeAccents(string.toLowerCase());
+
 /**
  *
  * @param {Recipe[]} recipes
  * @param {string} search
  */
 export const filterRecipe = (recipes, search) => {
-  const newRecipes = recipes;
-  console.log(search);
+  const newRecipes = [];
+  const formattedSearch = formatValue(search);
 
-  console.log(
-    "%cNOT YET IMPLEMENTED",
-    "color: #000000; background-color: #FFE53C; border-radius: 4px; padding: 2px 4px;",
-    search
-  );
+  for (let recipeIndex = 0; recipeIndex < recipes.length; recipeIndex++) {
+    const recipe = recipes[recipeIndex];
+    const { id: recipeId, name, description, ingredients } = recipe;
 
-  // TODO: Update this file with the search recipes algorithm.
+    if (newRecipes.includes(recipeId)) continue;
+
+    if (formatValue(name).includes(formattedSearch)) {
+      newRecipes.push(recipeId);
+
+      continue;
+    }
+
+    if (formatValue(description).includes(formattedSearch)) {
+      newRecipes.push(recipeId);
+
+      continue;
+    }
+
+    for (
+      let ingredientIndex = 0;
+      ingredientIndex < ingredients.length;
+      ingredientIndex++
+    ) {
+      const { ingredient: ingredientName } = ingredients[ingredientIndex];
+
+      if (formatValue(ingredientName).includes(formattedSearch)) {
+        newRecipes.push(recipeId);
+
+        break;
+      }
+    }
+  }
 
   return newRecipes;
 };

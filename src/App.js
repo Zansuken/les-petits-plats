@@ -39,7 +39,6 @@ const App = () => {
   }
 
   if (window.location.pathname.includes(routes.RECIPE)) {
-    console.log(window.location.pathname);
     dispatch(setCurrentRoute({ route: window.location.pathname }));
   }
 
