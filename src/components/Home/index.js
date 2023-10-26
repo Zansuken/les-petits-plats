@@ -4,18 +4,18 @@ import { setDisplayedRecipes, setRecipes } from "../../store/actions";
 import {
   displayedRecipesSelector,
   recipesSelector,
+  selectedTagsSelector,
   useSelector,
 } from "../../store/selectors";
 import RecipeCard from "./RecipeCard";
 import recipesData from "../../../database/recipes.js";
 import { getParams } from "../../router/helpers";
 import { filterRecipe } from "../Header/Search/helpers.js";
+import { formatRecipes, getDisplayedRecipes } from "../../helpers/dataHelpers";
 
 const styles = {
   root: "w-full pt-14 flex flex-wrap justify-center gap-12",
 };
-
-const formatRecipes = (recipes) => recipes.map((recipe) => recipe.id);
 
 dispatch(setRecipes(recipesData));
 
@@ -34,9 +34,15 @@ const HomeContent = () => {
 
   const allRecipes = useSelector(recipesSelector);
   const displayedRecipes = useSelector(displayedRecipesSelector);
+  const { appliance, utensils, ingredients } =
+    useSelector(selectedTagsSelector);
 
-  const currentRecipes = allRecipes.filter(({ id }) =>
-    displayedRecipes.includes(id)
+  const currentRecipes = getDisplayedRecipes(
+    allRecipes,
+    displayedRecipes,
+    ingredients,
+    appliance,
+    utensils
   );
 
   return build(
