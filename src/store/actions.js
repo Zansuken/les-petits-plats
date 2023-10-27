@@ -2,6 +2,7 @@ import {
   ADD_SELECTED_TAG,
   REMOVE_SELECTED_TAG,
   RESET_DISPLAYED_RECIPES,
+  RESET_FILTERED_OPTIONS,
   RESET_SELECTED_TAGS,
   SET_CURRENT_ROUTE,
   SET_DEFAULT_OPTIONS,
@@ -89,6 +90,10 @@ export const setDefaultOptions = (payload) => ({
 export const setFilteredOptions = (payload) => ({
   type: SET_FILTERED_OPTIONS,
   payload,
+});
+
+export const resetFilteredOptions = () => ({
+  type: RESET_FILTERED_OPTIONS,
 });
 
 /**
