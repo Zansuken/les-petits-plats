@@ -1,4 +1,5 @@
 import { build } from "../../../componentBuilder";
+import { categories } from "../../../constants/tags";
 import { getParams } from "../../../router/helpers";
 import { dispatch } from "../../../store";
 import { setSelectedTags } from "../../../store/actions";
@@ -24,9 +25,9 @@ const processParam = (category) => {
   }
 };
 
-processParam("ingredients");
-processParam("appliance");
-processParam("utensils");
+processParam(categories.INGREDIENTS);
+processParam(categories.APPLIANCE);
+processParam(categories.UTENSILS);
 
 const Filters = () => {
   const displayedRecipes = useSelector(displayedRecipesSelector);

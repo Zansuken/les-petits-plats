@@ -24,7 +24,7 @@ const RecipeCard = ({ recipe }) => {
     {
       element: "article",
       className: root,
-      key: recipe.id,
+      key: `recipe-card_${recipe.id}`,
       onClick: onClickCard,
       onkeydown: ({ key } = { key: "" }) => key === "Enter" && onClickCard(),
       tabindex: 0,
