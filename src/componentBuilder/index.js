@@ -175,34 +175,11 @@ const updateChildren = (element, newChildren, oldChildren) => {
     oldChildren?.some(({ key }) => Boolean(key)) &&
     newChildren?.some(({ key }) => Boolean(key))
   ) {
-    if (isNodeDiff(newChildren, oldChildren) && newLength === oldLength) {
-      newChildren?.forEach((newChild) => {
-        const oldChild = oldChildren?.find(
-          (oldChild) => oldChild.key === newChild.key
-        );
-        const concernedNode = document.getElementById(oldChild.key);
-        updateClassNames(concernedNode, newChild.className, oldChild.className);
-      });
-    }
+    if (isNodeDiff(newChildren, oldChildren)) {
+      const oldChildrenKeys = oldChildren.map(({ key }) => key);
 
-    if (newLength < oldLength) {
-      const childrenToRemove = oldChildren
-        ?.filter(
-          (oldChild) =>
-            !newChildren?.some((newChild) => newChild.key === oldChild.key)
-        )
-        .map(({ key }) => key);
-
-      childrenToRemove.forEach(removeChild);
-    }
-
-    if (newLength > oldLength) {
-      const missingChildren = newChildren?.filter(
-        (newChild) =>
-          !oldChildren?.some((oldChild) => oldChild.key === newChild.key)
-      );
-
-      missingChildren.forEach(appendChild);
+      oldChildrenKeys.forEach(removeChild);
+      newChildren.forEach(appendChild);
     }
   } else {
     for (let i = 0; i < newLength || i < oldLength; i++) {

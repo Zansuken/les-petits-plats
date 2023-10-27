@@ -10,6 +10,7 @@ import {
   ADD_SELECTED_TAG,
   REMOVE_SELECTED_TAG,
   RESET_DISPLAYED_RECIPES,
+  RESET_FILTERED_OPTIONS,
   RESET_SELECTED_TAGS,
   SET_CURRENT_ROUTE,
   SET_DEFAULT_OPTIONS,
@@ -38,7 +39,17 @@ export const initialState = {
     appliance: [],
     utensils: [],
   },
-  filteredOptions: {},
+  filteredOptions: {
+    ingredients: {
+      defaultResult: [],
+    },
+    appliance: {
+      defaultResult: [],
+    },
+    utensils: {
+      defaultResult: [],
+    },
+  },
   recipes: [],
   displayedRecipes: [],
 };
@@ -160,6 +171,26 @@ export const reducer = ({ type, payload }, state = initialState) => {
             ...(result.length > 0 ? { result } : {}),
           },
         },
+      });
+
+      break;
+
+    case RESET_FILTERED_OPTIONS:
+      const updatedFilteredOptions = Object.keys(state.filteredOptions).reduce(
+        (acc, key) => {
+          return {
+            ...acc,
+            [key]: {
+              defaultResult: state.filteredOptions[key].defaultResult,
+            },
+          };
+        },
+        {}
+      );
+
+      updateStore({
+        ...state,
+        filteredOptions: updatedFilteredOptions,
       });
 
       break;
