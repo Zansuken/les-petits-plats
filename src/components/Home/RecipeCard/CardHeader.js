@@ -9,7 +9,7 @@ const styles = {
 
 const CardHeader = (
   { background, recipeTime } = {
-    background: "/assets/images/recipes/Recette01.jpg",
+    background: "/assets/images/recipes/Recette01.webp",
     recipeTime: 0,
   }
 ) => {
@@ -21,6 +21,7 @@ const CardHeader = (
       className: backgroundImg,
       src: `/assets/images/recipes/${background}`,
       loading: "lazy",
+      placeholder: "/assets/images/placeholder.png",
     }),
     Chip({ label: `${recipeTime}min`, className: chip })
   );

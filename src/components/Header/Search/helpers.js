@@ -10,7 +10,7 @@ import { removeAccents } from "../../../helpers/common";
  * @property {number} time - The time it takes to prepare the recipe.
  * @property {string} description - The recipe's description.
  * @property {string} appliance - The appliance used to make the recipe.
- * @property {string[]} ustensils - The utensils used to make the recipe.
+ * @property {string[]} utensils - The utensils used to make the recipe.
  */
 
 const formatValue = (string) => removeAccents(string.toLowerCase());

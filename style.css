@@ -36,3 +36,20 @@ input:focus {
   #app ::-webkit-scrollbar-track {
     background: transparent;
   }
+  
+  @keyframes pulse {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .lazy {
+    background-color: #e5e7eb;
+    animation: pulse 2s infinite;
+  }
