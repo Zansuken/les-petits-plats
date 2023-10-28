@@ -1,5 +1,4 @@
 import { removeAccents } from "../../../helpers/common";
-
 /**
  * @typedef {Object} Recipe
  * @property {number} id - The recipe's ID.
@@ -10,7 +9,7 @@ import { removeAccents } from "../../../helpers/common";
  * @property {number} time - The time it takes to prepare the recipe.
  * @property {string} description - The recipe's description.
  * @property {string} appliance - The appliance used to make the recipe.
- * @property {string[]} utensils - The utensils used to make the recipe.
+ * @property {string[]} ustensils - The utensils used to make the recipe.
  */
 
 const formatValue = (string) => removeAccents(string.toLowerCase());
@@ -24,17 +23,38 @@ export const filterRecipe = (recipes, search) => {
   const newRecipes = [];
   const formattedSearch = formatValue(search);
 
-  recipes.forEach(({ name, ingredients, description, id }) => {
-    if (
-      formatValue(name).includes(formattedSearch) ||
-      formatValue(description).includes(formattedSearch) ||
-      ingredients.some(({ ingredient }) =>
-        formatValue(ingredient).includes(formattedSearch)
-      )
-    ) {
-      newRecipes.push(id);
+  for (let recipeIndex = 0; recipeIndex < recipes.length; recipeIndex++) {
+    const recipe = recipes[recipeIndex];
+    const { id: recipeId, name, description, ingredients } = recipe;
+
+    if (newRecipes.includes(recipeId)) continue;
+
+    if (formatValue(name).includes(formattedSearch)) {
+      newRecipes.push(recipeId);
+
+      continue;
     }
-  });
+
+    if (formatValue(description).includes(formattedSearch)) {
+      newRecipes.push(recipeId);
+
+      continue;
+    }
+
+    for (
+      let ingredientIndex = 0;
+      ingredientIndex < ingredients.length;
+      ingredientIndex++
+    ) {
+      const { ingredient: ingredientName } = ingredients[ingredientIndex];
+
+      if (formatValue(ingredientName).includes(formattedSearch)) {
+        newRecipes.push(recipeId);
+
+        break;
+      }
+    }
+  }
 
   return newRecipes;
 };
