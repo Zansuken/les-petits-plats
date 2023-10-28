@@ -52,6 +52,26 @@ export const createElement = (node) => {
     for (const prop in props) {
       if (prop.startsWith("on")) {
         el.addEventListener(prop.slice(2).toLowerCase(), props[prop]);
+      } else if (
+        prop === "placeholder" &&
+        ["img", "video", "iframe"].includes(element)
+      ) {
+        el.src = props[prop];
+        el.classList.add("lazy");
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const img = new Image();
+              img.src = props.src;
+              img.onload = () => {
+                el.src = img.src;
+                el.classList.remove("lazy");
+              };
+              observer.unobserve(el);
+            }
+          });
+        });
+        observer.observe(el);
       } else {
         el.setAttribute(prop, props[prop]);
       }

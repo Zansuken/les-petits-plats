@@ -3,10 +3,6 @@ import { categories } from "../../../constants/tags";
 import { getParams } from "../../../router/helpers";
 import { dispatch } from "../../../store";
 import { setSelectedTags } from "../../../store/actions";
-import {
-  displayedRecipesSelector,
-  useSelector,
-} from "../../../store/selectors";
 import Options from "./Options";
 import RecipesCount from "./RecipesCount";
 
@@ -29,14 +25,11 @@ processParam(categories.INGREDIENTS);
 processParam(categories.APPLIANCE);
 processParam(categories.UTENSILS);
 
-const Filters = () => {
-  const displayedRecipes = useSelector(displayedRecipesSelector);
-
-  return build(
+const Filters = ({ recipesCount }) =>
+  build(
     { element: "div", className: styles.root },
     Options(),
-    RecipesCount({ count: displayedRecipes.length })
+    RecipesCount({ count: recipesCount })
   );
-};
 
 export default Filters;

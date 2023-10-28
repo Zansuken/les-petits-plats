@@ -1,5 +1,5 @@
 import { build, updateView } from "../../../componentBuilder";
-import { isNodeDiff, removeAccents } from "../../../helpers/common";
+import { isNodeDiff } from "../../../helpers/common";
 import { dispatch } from "../../../store";
 import {
   addSelectedTag,
@@ -16,18 +16,20 @@ import {
 import MultipleSelect from "../../shared/MultipleSelect";
 import recipesData from "../../../../database/recipes.js";
 import { categories } from "../../../constants/tags";
-import { getFilteredTagFromSearch } from "../../Header/Search";
 import { translate } from "../../../helpers/translations";
+import {
+  getFilteredTagFromSearch,
+  getTagId,
+} from "../../../helpers/dataHelpers";
 
 const styles = {
   root: "flex gap-4 max-w-2xl w-[100%] justify-between flex-wrap",
 };
 
-// TODO: Move to dataHelpers
-export const formattedOptions = (options, category) =>
+const formattedOptions = (options, category) =>
   options
     .map((option) => ({
-      id: removeAccents(option.name.toLowerCase().split(" ").join("_")),
+      id: getTagId(option.name),
       category,
       ...option,
     }))
@@ -62,7 +64,7 @@ const options = () => {
 
   recipesData.forEach((recipeData) => {
     appliances.add(recipeData.appliance.toLowerCase());
-    recipeData.ustensils.forEach((utensil) =>
+    recipeData.utensils.forEach((utensil) =>
       utensils.add(utensil.toLowerCase())
     );
     recipeData.ingredients.forEach(({ ingredient }) =>
