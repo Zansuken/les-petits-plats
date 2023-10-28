@@ -1,6 +1,7 @@
 import { build, updateView } from "../../../componentBuilder";
 import { categories } from "../../../constants/tags";
-import { debounce, removeAccents } from "../../../helpers/common";
+import { debounce } from "../../../helpers/common";
+import { getFilteredTagFromSearch } from "../../../helpers/dataHelpers";
 import { addParams, getParams, removeParams } from "../../../router/helpers";
 import { dispatch } from "../../../store";
 import {
@@ -12,7 +13,6 @@ import {
   setSearchInput,
 } from "../../../store/actions";
 import {
-  allDefaultOptionsSelector,
   recipesSelector,
   searchSelector,
   useSelector,
@@ -22,77 +22,6 @@ import Icon from "../../shared/Icon";
 import TextField from "../../shared/TextField";
 import { filterRecipe } from "./helpers.js";
 
-const getDefaultTagsByCategory = (defaultTags) => {
-  const filterTagsByCategory = (tagCategory) =>
-    defaultTags.filter(({ category }) => category === tagCategory);
-
-  return [
-    filterTagsByCategory(categories.INGREDIENTS),
-    filterTagsByCategory(categories.APPLIANCE),
-    filterTagsByCategory(categories.UTENSILS),
-  ];
-};
-
-const getTagId = (tag) => removeAccents(tag.toLowerCase().split(" ").join("_"));
-
-export const getFilteredTagFromSearch = () => {
-  const recipes = useSelector(recipesSelector);
-  const searchInput = () => useSelector(searchSelector);
-  const allDefaultOptions = useSelector(allDefaultOptionsSelector);
-  const filteredRecipes = filterRecipe(recipes, searchInput());
-
-  const concernedRecipes = filteredRecipes.map((id) =>
-    recipes.find((recipe) => recipe.id === id)
-  );
-
-  const [defaultIngredientsTags, defaultAppliancesTags, defaultUtensilsTags] =
-    getDefaultTagsByCategory(allDefaultOptions);
-  const filteredIngredients = [];
-  const filteredAppliances = [];
-  const filteredUtensils = [];
-
-  concernedRecipes.forEach(({ ingredients, appliance, ustensils }) => {
-    ingredients.forEach((ingredient) => {
-      if (
-        !filteredIngredients.some(
-          ({ id }) => getTagId(ingredient.ingredient) === id
-        )
-      )
-        filteredIngredients.push(
-          defaultIngredientsTags.find(
-            ({ id }) => getTagId(ingredient.ingredient) === id
-          )
-        );
-    });
-    if (!filteredAppliances.some(({ id }) => getTagId(appliance) === id))
-      filteredAppliances.push(
-        defaultAppliancesTags.find(({ id }) => getTagId(appliance) === id)
-      );
-
-    ustensils.forEach((utensil) => {
-      if (!filteredUtensils.some(({ id }) => getTagId(utensil) === id))
-        filteredUtensils.push(
-          defaultUtensilsTags.find(({ id }) => getTagId(utensil) === id)
-        );
-    });
-  });
-
-  return [
-    {
-      defaultIngredientsTags,
-      filteredIngredients,
-    },
-    {
-      defaultAppliancesTags,
-      filteredAppliances,
-    },
-    {
-      defaultUtensilsTags,
-      filteredUtensils,
-    },
-  ];
-};
-
 const styles = {
   root: "px-60 py-36 flex flex-col gap-8 items-center",
   title: "font-title text-yellow text-4.5xl/[66px] text-center max-w-[720px]",
@@ -101,6 +30,7 @@ const styles = {
 const Search = () => {
   const currentParamsSearch = getParams().find(({ name }) => name === "search");
   const recipes = useSelector(recipesSelector);
+  const searchInput = () => useSelector(searchSelector);
 
   const onInput = debounce((event) => {
     if (event?.target) {
@@ -108,11 +38,17 @@ const Search = () => {
     }
   }, 300);
 
-  const searchInput = () => useSelector(searchSelector);
+  const resetSearchParams = () => {
+    removeParams("search");
+    removeParams("appliance");
+    removeParams("ingredients");
+    removeParams("utensils");
+  };
 
   const onSearch = () => {
     if (searchInput().length < 3) return;
     if (searchInput()) {
+      resetSearchParams();
       dispatch(resetFilteredOptions());
       dispatch(resetSelectedTags());
       addParams({ name: "search", value: searchInput() });
@@ -158,7 +94,7 @@ const Search = () => {
   };
 
   const onResetSearch = () => {
-    removeParams("search");
+    resetSearchParams();
     dispatch(setSearchInput(""));
     dispatch(resetDisplayedRecipes());
     dispatch(resetFilteredOptions());

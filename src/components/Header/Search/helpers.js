@@ -1,3 +1,5 @@
+import { removeAccents } from "../../../helpers/common";
+
 /**
  * @typedef {Object} Recipe
  * @property {number} id - The recipe's ID.
@@ -8,8 +10,10 @@
  * @property {number} time - The time it takes to prepare the recipe.
  * @property {string} description - The recipe's description.
  * @property {string} appliance - The appliance used to make the recipe.
- * @property {string[]} ustensils - The utensils used to make the recipe.
+ * @property {string[]} utensils - The utensils used to make the recipe.
  */
+
+const formatValue = (string) => removeAccents(string.toLowerCase());
 
 /**
  *
@@ -17,16 +21,20 @@
  * @param {string} search
  */
 export const filterRecipe = (recipes, search) => {
-  const newRecipes = recipes;
-  console.log(search);
+  const newRecipes = [];
+  const formattedSearch = formatValue(search);
 
-  console.log(
-    "%cNOT YET IMPLEMENTED",
-    "color: #000000; background-color: #FFE53C; border-radius: 4px; padding: 2px 4px;",
-    search
-  );
-
-  // TODO: Update this file with the search recipes algorithm.
+  recipes.forEach(({ name, ingredients, description, id }) => {
+    if (
+      formatValue(name).includes(formattedSearch) ||
+      formatValue(description).includes(formattedSearch) ||
+      ingredients.some(({ ingredient }) =>
+        formatValue(ingredient).includes(formattedSearch)
+      )
+    ) {
+      newRecipes.push(id);
+    }
+  });
 
   return newRecipes;
 };
