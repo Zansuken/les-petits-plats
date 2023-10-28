@@ -4,7 +4,7 @@ import RecipeDescription from "./RecipeDescription";
 import RecipeIngredients from "./RecipeIngredients";
 
 const styles = {
-  root: "pt-8 px-6 flex gap-8 flex-col",
+  root: "pt-8 px-6 flex gap-8 flex-col flex-1",
   title: "font-title text-[18px]",
 };
 

@@ -3,9 +3,9 @@ import Typography from "../../shared/Typography";
 import Ingredient from "./Ingredient";
 
 const styles = {
-  root: "flex flex-col gap-4",
+  root: "flex flex-col gap-4 flex-1",
   subtitle: "text-xs text-grey font-bold",
-  content: "grid grid-cols-2 gap-5",
+  content: "grid grid-cols-2 gap-5 flex-1",
 };
 
 const RecipeIngredients = ({ ingredients }) => {
