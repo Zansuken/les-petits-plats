@@ -14,8 +14,6 @@ import { removeAccents } from "../../../helpers/common";
 
 const formatValue = (string) => removeAccents(string.toLowerCase());
 
-const formatValue = (string) => removeAccents(string.toLowerCase());
-
 /**
  *
  * @param {Recipe[]} recipes
