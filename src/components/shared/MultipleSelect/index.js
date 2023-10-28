@@ -46,7 +46,7 @@ const Options = ({ selectedOptions, id, onSelect }) => {
         className: label,
       }),
       Icon({
-        src: "assets/images/crossPlainIcon.svg",
+        src: "/assets/images/crossPlainIcon.svg",
         className: icon,
       })
     );
