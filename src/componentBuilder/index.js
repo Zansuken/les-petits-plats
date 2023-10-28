@@ -100,7 +100,7 @@ const updateAttributes = (element, newProps, oldProps) => {
   const allProps = { ...newProps, ...oldProps };
 
   for (const prop in allProps) {
-    if (newProps[prop]) {
+    if (newProps?.[prop]) {
       element.setAttribute(prop, newProps[prop]);
     } else {
       element.removeAttribute(prop);
@@ -183,6 +183,8 @@ const updateChildren = (element, newChildren, oldChildren) => {
   const updateChild = (newChild, oldChild, index) => {
     updateElement(element, newChild, oldChild, index);
   };
+
+  if (newChildren === undefined || oldChildren === undefined) return;
 
   const newLength = newChildren?.length;
   const oldLength = oldChildren?.length;

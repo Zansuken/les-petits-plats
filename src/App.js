@@ -1,14 +1,14 @@
 import { build } from "./componentBuilder";
 import Header from "./components/Header";
 import Home from "./pages/Home";
-import Recipe from "./pages/Recipe";
 import { getParams } from "./router/helpers";
 import routes from "./router/routes";
 import { dispatch } from "./store";
-import { setCurrentRoute } from "./store/actions";
+import { setCurrentRoute, setSearchInput } from "./store/actions";
 import {
   currentRouteSelector,
   recipesSelector,
+  searchSelector,
   useSelector,
 } from "./store/selectors";
 // eslint-disable-next-line no-unused-vars
@@ -25,8 +25,15 @@ const styles = {
 const App = () => {
   const currentParams = getParams();
   const currentRoute = useSelector(currentRouteSelector);
+  const searchInput = () => useSelector(searchSelector);
 
   if (window.location.pathname.includes(routes.HOME)) {
+    const searchParam = currentParams?.find(({ name }) => name === "search");
+
+    if (searchParam && searchInput() !== searchParam.value) {
+      dispatch(setSearchInput(searchParam.value));
+    }
+
     if (!currentRoute.includes(routes.HOME)) {
       if (currentParams.length > 0) {
         dispatch(
@@ -38,23 +45,12 @@ const App = () => {
     }
   }
 
-  if (window.location.pathname.includes(routes.RECIPE)) {
-    console.log(window.location.pathname);
-    dispatch(setCurrentRoute({ route: window.location.pathname }));
-  }
-
   const route = useSelector(currentRouteSelector);
   const paramId = route.split("/")[2];
   const allRecipes = useSelector(recipesSelector);
   const concernedRecipe = allRecipes.find(
     (recipe) => recipe.id.toString() === paramId
   );
-
-  const getPage = () => {
-    if (window.location.pathname.includes(routes.HOME)) return Home();
-    if (window.location.pathname.includes(routes.RECIPE))
-      return Recipe({ concernedRecipe, paramId });
-  };
 
   return build(
     {
@@ -63,7 +59,7 @@ const App = () => {
       className: styles.root,
     },
     Header({ background: concernedRecipe?.image }),
-    getPage()
+    Home()
   );
 };
 

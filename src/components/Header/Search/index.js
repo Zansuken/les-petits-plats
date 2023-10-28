@@ -2,6 +2,7 @@ import { build, updateView } from "../../../componentBuilder";
 import { categories } from "../../../constants/tags";
 import { debounce } from "../../../helpers/common";
 import { getFilteredTagFromSearch } from "../../../helpers/dataHelpers";
+import { sanitizeInput } from "../../../helpers/validationHelpers";
 import { addParams, getParams, removeParams } from "../../../router/helpers";
 import { dispatch } from "../../../store";
 import {
@@ -51,7 +52,7 @@ const Search = () => {
       resetSearchParams();
       dispatch(resetFilteredOptions());
       dispatch(resetSelectedTags());
-      addParams({ name: "search", value: searchInput() });
+      addParams({ name: "search", value: sanitizeInput(searchInput()) });
       const filteredRecipes = filterRecipe(recipes, searchInput());
 
       const [

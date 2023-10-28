@@ -1,5 +1,4 @@
 import { build } from "../../../componentBuilder";
-import { searchSelector, useSelector } from "../../../store/selectors";
 import Typography from "../../shared/Typography";
 import RecipeDescription from "./RecipeDescription";
 import RecipeIngredients from "./RecipeIngredients";
@@ -10,7 +9,6 @@ const styles = {
 };
 
 const CardBody = ({ recipe }) => {
-  const searchInput = () => useSelector(searchSelector);
   const { root, title } = styles;
   const { name, description, ingredients } = recipe;
 
@@ -20,13 +18,11 @@ const CardBody = ({ recipe }) => {
       variant: "h4",
       value: name,
       className: title,
-      currentSearch: searchInput(),
     }),
     RecipeDescription({
       description: description,
-      currentSearch: searchInput(),
     }),
-    RecipeIngredients({ ingredients, currentSearch: searchInput() })
+    RecipeIngredients({ ingredients })
   );
 };
 

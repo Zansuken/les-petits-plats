@@ -18,3 +18,17 @@ export const isString = (string) => typeof string === "string";
  * @returns {boolean} - True if number is a number
  */
 export const isNumber = (number) => typeof number === "number";
+
+export const sanitizeInput = (input) => {
+  const map = {
+    "&": "",
+    "<": "",
+    ">": "",
+    '"': "",
+    "'": "",
+  };
+
+  return input.replace(/[&<>"']/g, (m) => {
+    return map[m];
+  });
+};

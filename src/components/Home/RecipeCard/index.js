@@ -1,8 +1,4 @@
-import { build } from "../../../componentBuilder";
-import { resetParams } from "../../../router/helpers";
-import routes from "../../../router/routes";
-import { dispatch } from "../../../store";
-import { resetSelectedTags, setCurrentRoute } from "../../../store/actions";
+import { build, updateView } from "../../../componentBuilder";
 import CardBody from "./CardBody";
 import CardHeader from "./CardHeader";
 
@@ -14,10 +10,8 @@ const RecipeCard = ({ recipe }) => {
   const { root } = styles;
 
   const onClickCard = () => {
-    dispatch(setCurrentRoute({ route: `${routes.RECIPE}/${recipe.id}` }));
-    dispatch(resetSelectedTags());
-    resetParams();
-    window.location.reload();
+    console.log("Card clicked");
+    updateView();
   };
 
   return build(
