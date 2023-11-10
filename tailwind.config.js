@@ -28,7 +28,7 @@ module.exports = {
         640: "160rem",
       },
       backgroundImage: {
-        banner: "url('/assets/images/banner.png')",
+        banner: "url('/assets/images/banner.webp')",
       },
       transitionProperty: {
         height: "height",

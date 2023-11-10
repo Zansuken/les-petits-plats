@@ -21,7 +21,7 @@ const CardHeader = (
       className: backgroundImg,
       src: `/assets/images/recipes/${background}`,
       loading: "lazy",
-      placeholder: "/assets/images/placeholder.png",
+      placeholder: "/assets/images/placeholder.webp",
     }),
     Chip({ label: `${recipeTime}min`, className: chip })
   );

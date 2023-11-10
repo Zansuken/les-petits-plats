@@ -24,25 +24,18 @@ const styles = {
  */
 const App = () => {
   const currentParams = getParams();
-  const currentRoute = useSelector(currentRouteSelector);
   const searchInput = () => useSelector(searchSelector);
 
-  if (window.location.pathname.includes(routes.HOME)) {
-    const searchParam = currentParams?.find(({ name }) => name === "search");
+  const searchParam = currentParams?.find(({ name }) => name === "search");
 
-    if (searchParam && searchInput() !== searchParam.value) {
-      dispatch(setSearchInput(searchParam.value));
-    }
+  if (searchParam && searchInput() !== searchParam.value) {
+    dispatch(setSearchInput(searchParam.value));
+  }
 
-    if (!currentRoute.includes(routes.HOME)) {
-      if (currentParams.length > 0) {
-        dispatch(
-          setCurrentRoute({ route: routes.HOME, params: currentParams })
-        );
-      } else {
-        dispatch(setCurrentRoute({ route: routes.HOME }));
-      }
-    }
+  if (currentParams.length > 0) {
+    dispatch(setCurrentRoute({ route: routes.HOME, params: currentParams }));
+  } else {
+    dispatch(setCurrentRoute({ route: routes.HOME }));
   }
 
   const route = useSelector(currentRouteSelector);
