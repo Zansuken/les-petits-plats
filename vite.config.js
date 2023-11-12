@@ -6,11 +6,9 @@ export default defineConfig({
   server: {
     open: "/index.html",
   },
-  base: "/les-petits-plats/",
   build: {
     rollupOptions: {
       input: "src/index.js",
     },
-    outDir: "dist",
   },
 });
