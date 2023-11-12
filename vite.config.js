@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     open: "/index.html",
   },
-  base: "/les-petits-plats/",
+  base: "/",
   build: {
     rollupOptions: {
       input: "src/index.js",
