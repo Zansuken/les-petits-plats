@@ -1,5 +1,5 @@
 import { root } from "../../main";
-import App from "..";
+import App from "../App";
 import { debounce, isNodeDiff } from "../helpers/common";
 // eslint-disable-next-line no-unused-vars
 import { ComponentType } from "../types";
