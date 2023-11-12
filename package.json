@@ -2,8 +2,11 @@
   "name": "les_petits_plats",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://zansuken.github.io/les-petits-plats/",
   "type": "module",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
@@ -11,6 +14,7 @@
   "devDependencies": {
     "autoprefixer": "^10.4.16",
     "eslint": "^8.49.0",
+    "gh-pages": "^6.0.0",
     "postcss": "^8.4.30",
     "tailwindcss": "^3.3.3",
     "vite": "^4.4.5",
