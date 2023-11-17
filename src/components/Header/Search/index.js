@@ -1,6 +1,5 @@
 import { build, updateView } from "../../../componentBuilder";
 import { categories } from "../../../constants/tags";
-import { debounce } from "../../../helpers/common";
 import { getFilteredTagFromSearch } from "../../../helpers/dataHelpers";
 import { sanitizeInput } from "../../../helpers/validationHelpers";
 import { addParams, getParams, removeParams } from "../../../router/helpers";
@@ -33,11 +32,15 @@ const Search = () => {
   const recipes = useSelector(recipesSelector);
   const searchInput = () => useSelector(searchSelector);
 
-  const onInput = debounce((event) => {
+  const onInput = (event) => {
     if (event?.target) {
       dispatch(setSearchInput(event.target.value ?? ""));
+      onSearch();
+      if (event.target.value.length < 3) {
+        onResetSearch();
+      }
     }
-  }, 300);
+  };
 
   const resetSearchParams = () => {
     removeParams("search");
